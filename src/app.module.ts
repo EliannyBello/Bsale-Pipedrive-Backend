@@ -19,6 +19,8 @@ import { LoggerService } from './common/logger/logger.service';
 import { LoggerModule } from './common/logger/logger.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import {join} from "path";
+import { BsaleModule } from './shared/bsale/bsale.module';
+import { PipedriveModule } from './shared/pipedrive/pipedrive.module';
 
 @Module({
   imports: [
@@ -57,6 +59,8 @@ import {join} from "path";
       rootPath: join(__dirname, '..', 'uploads/pdfs'),
       serveRoot: '/pdfs',
     }),
+    BsaleModule,
+    PipedriveModule,
   ],
   controllers: [AppController],
   providers: [
