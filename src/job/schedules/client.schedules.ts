@@ -8,7 +8,7 @@ export class ClientSchedule {
 
   constructor(private readonly clientService: ClientService) {}
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async handleCron() {
     this.logger.log('Sincronizando clientes de Bsale...');
     try {
