@@ -21,6 +21,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import {join} from "path";
 import { BsaleModule } from './shared/bsale/bsale.module';
 import { PipedriveModule } from './shared/pipedrive/pipedrive.module';
+import { ClientModule } from './client/client.module';
+import { JobModule } from './job/job.module';
 
 @Module({
   imports: [
@@ -61,6 +63,8 @@ import { PipedriveModule } from './shared/pipedrive/pipedrive.module';
     }),
     BsaleModule,
     PipedriveModule,
+    ClientModule,
+    JobModule,
   ],
   controllers: [AppController],
   providers: [
