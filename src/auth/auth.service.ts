@@ -12,7 +12,6 @@ import { Payload } from './interface/payload.interface';
 import * as argon2 from 'argon2';
 import { UsersService } from 'src/users/users.service';
 import { ReplacePassDto } from './dto/replace-pass.dto';
-import { MailService } from '../mail/mail.service';
 import { RecoverPassDto } from './dto/recover.dto';
 import { User } from '../users/entities/user.entity';
 
@@ -24,7 +23,6 @@ export class AuthService {
     private readonly model: Model<Auth>,
     private jwtService: JwtService,
     private readonly userService: UsersService,
-    private readonly mailService: MailService,
   ) {}
   private async createRegister(login: { email: string }) {
     const newDocument = new this.model(login);
@@ -83,7 +81,6 @@ export class AuthService {
       name: user.name,
     };
     const token = await this.createToken(payload);
-    this.mailService.sendMail(user.email, user.name, token);
     return {
       message: 'Enviamos a tu correo el método de recuperación',
     };

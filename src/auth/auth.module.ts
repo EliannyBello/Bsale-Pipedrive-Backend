@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MailModule } from 'src/mail/mail.module';
+
 
 @Global()
 @Module({
@@ -29,7 +29,6 @@ import { MailModule } from 'src/mail/mail.module';
       }),
       inject: [ConfigService],
     }),
-    MailModule,
   ],
   exports: [AuthService],
 })
