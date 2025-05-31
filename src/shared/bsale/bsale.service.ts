@@ -21,9 +21,14 @@ export class BsaleService {
     return this.bsaleTokenModel.create({ accessToken });
   }
 
-  // Obtiene el token
-  async getToken(): Promise<string | null> {
+
+  // Devuelve el token y la url de Bsale
+  async getBsaleConfig(): Promise<{ accessToken: string; urlBsale: string } | null> {
     const tokenDoc = await this.bsaleTokenModel.findOne();
-    return tokenDoc?.accessToken ?? null;
+    if (!tokenDoc) return null;
+    return {
+      accessToken: tokenDoc.accessToken,
+      urlBsale: tokenDoc.urlBsale,
+    };
   }
 }
