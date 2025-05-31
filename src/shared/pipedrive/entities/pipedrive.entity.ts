@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class PipedriveToken {
-  //codigo multivende
+
   @Prop({ required: true })
   apiToken: string;
 

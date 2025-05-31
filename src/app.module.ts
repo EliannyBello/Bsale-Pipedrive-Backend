@@ -23,6 +23,7 @@ import { BsaleModule } from './shared/bsale/bsale.module';
 import { PipedriveModule } from './shared/pipedrive/pipedrive.module';
 import { ClientModule } from './client/client.module';
 import { JobModule } from './job/job.module';
+import { PeopleModule } from './people/people.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { JobModule } from './job/job.module';
     PipedriveModule,
     ClientModule,
     JobModule,
+    PeopleModule,
   ],
   controllers: [AppController],
   providers: [
