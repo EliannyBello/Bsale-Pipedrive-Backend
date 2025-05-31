@@ -1,134 +1,88 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Bsale-Pipedrive Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este proyecto es un middleware desarrollado en **NestJS** y **TypeScript** que integra y sincroniza datos entre los sistemas Bsale y Pipedrive, facilitando la gestión de clientes y personas en ambas plataformas.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Características principales
 
-# Fullertor
-Fullertor es un middleware diseñado para facilitar la integración entre los sistemas Defontana y Agilizar, optimizando la gestión de ventas, compras y logística en la organización. Este sistema permite:
+- **Sincronización de clientes** desde Bsale y almacenamiento en MongoDB.
+- **Sincronización de personas** con Pipedrive, creando o actualizando registros según corresponda.
+- **Persistencia de datos** en MongoDB usando Mongoose.
+- **Estructura modular** y escalable basada en NestJS.
 
-## Obtener ventas:
-Recopila y procesa información de ventas provenientes de diferentes fuentes.
-## Distribuir cargas:
-Asigna y distribuye las ventas automáticamente a las sucursales de Defontana en función de criterios específicos.
-## Seleccionar ventas para sucursales:
-Controla qué ventas serán gestionadas en cada sucursal de Defontana, permitiendo un manejo eficiente y personalizado.
-## Integración con Agilizar:
-Sincroniza y transfiere datos entre Defontana y Agilizar, asegurando consistencia y rapidez.
-## Gestión de envíos:
-Facilita el envío de ventas y documentos asociados a los procesos de despacho.
-## Compras y cancelaciones:
-Procesa compras y maneja cancelaciones, manteniendo la información actualizada en ambos sistemas.
-## Guías de despacho:
-Genera y gestiona guías de despacho, facilitando la trazabilidad y control de los envíos.
-# Tecnologías Utilizadas
-## Backend: 
-Construido con NestJS y TypeScript, proporcionando una estructura robusta y modular.
-## Frontend: 
-Desarrollado con Next.js 15 y React 19, permitiendo una interfaz ágil y dinámica.
-## Componentes:
-Interfaz de usuario implementada con la librería de componentes Shadcn, garantizando consistencia visual y alta personalización.
+## Estructura del proyecto
 
-## Fullertor permite mejorar la eficiencia operativa y centralizar la información, agilizando el proceso de toma de decisiones y reduciendo el tiempo necesario para la actualización de los datos entre sistemas.
+- `src/client`: Lógica y entidades relacionadas con clientes de Bsale.
+- `src/people`: Lógica y entidades relacionadas con personas y su sincronización con Pipedrive.
+- `src/shared`: Servicios compartidos (ej: integración con APIs externas).
+- `src/job/schedules`: Tareas programadas para sincronización automática.
 
-## Configurations and Environment Variables
+## Instalación
 
 ```bash
-# Create a .env file in the root of the project and add the following configurations
-$ cp .env.example .env
+# Clona el repositorio
+git clone <url-del-repositorio>
+cd Bsale-Pipedrive-Backend
 
-# Add the following configurations to the .env file
-
-# Create services with the compose.yaml file
-$ docker-compose up -d
+# Instala dependencias
+pnpm install
 ```
 
-## Project setup
+## Configuración
+
+1. Copia el archivo de ejemplo de variables de entorno y edítalo según tus credenciales:
 
 ```bash
-$ yarn install
+cp .env.example .env
 ```
 
-## Compile and run the project
+2. Completa los valores necesarios en `.env` para MongoDB, Bsale y Pipedrive.
+
+## Uso
+
+### Desarrollo
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+pnpm start:dev
 ```
 
-## Run tests
+### Producción
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+pnpm start:prod
 ```
 
-## Deployment
+### Sincronización manual
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Puedes exponer endpoints o usar las tareas programadas para sincronizar clientes y personas.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Sincronización automática
+
+El sistema incluye tareas programadas (`cron`) que sincronizan automáticamente los datos entre Bsale y Pipedrive cada minuto.
+
+## Pruebas
 
 ```bash
-$ yarn install -g mau
-$ mau deploy
+yarn test
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Tecnologías utilizadas
 
-## Resources
+- [NestJS](https://nestjs.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [MongoDB](https://www.mongodb.com/)
+- [Mongoose](https://mongoosejs.com/)
+- [Pipedrive API](https://developers.pipedrive.com/docs/api/v1/)
+- [Bsale API](https://api-docs.bsale.cl/)
 
-Check out a few resources that may come in handy when working with NestJS:
+## Estructura de Colecciones
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- **clients**: Clientes provenientes de Bsale.
+- **people**: Personas sincronizadas con Pipedrive (nombre pluralizado automáticamente por Mongoose).
 
-## Support
+## Contribuir
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+¡Las contribuciones son bienvenidas! Por favor abre un issue o un pull request.
 
-## Stay in touch
+## Licencia
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+> Proyecto desarrollado por Elianny Katiuska Bello Manzo 
