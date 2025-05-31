@@ -13,24 +13,31 @@ export class PeopleService {
 
   constructor(
     @InjectModel(Client.name) private clientModel: Model<ClientDocument>,
-    @InjectModel(Person.name) private personModel: Model<PersonDocument>, // <-- Agregado
+    @InjectModel(Person.name) private personModel: Model<PersonDocument>, 
     private readonly pipedriveService: PipedriveService,
   ) {}
 
   // Sincroniza personas con Pipedrive
   async syncPeopleWithPipedrive(): Promise<{ created: number; updated: number }> {
+
+    // Obtiene el API key de Pipedrive
     const apiKey = await this.pipedriveService.getApiKey();
     if (!apiKey) throw new Error('No Pipedrive API key found');
 
+    // Obtiene todos los clientes de MongoDB
     const clients = await this.clientModel.find().lean();
+
+    // contador para personas creadas y actualizadas
     let created = 0, updated = 0;
 
+    // para el log de si los clientes tienen datos incompletos
     for (const client of clients) {
       if (!client.email || !client.firstName || !client.lastName) {
         this.logger.warn(`Cliente con datos incompletos: ${JSON.stringify(client)}`);
         continue;
       }
 
+      // Prepara el payload para Pipedrive
       const personPayload = {
         name: `${client.firstName} ${client.lastName}`.trim(),
         email: [{ value: client.email, primary: true, label: 'main' }],

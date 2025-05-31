@@ -14,6 +14,8 @@ export class ClientService {
 
   // Función para obtener clientes de Bsale y guardarlos en la base de datos
   async syncBsaleClients(): Promise<any> {
+
+    // Obtiene el token de acceso de Bsale
     const accessToken = await this.bsaleService.getToken();
     if (!accessToken) throw new Error('No Bsale access token found');
 

@@ -21,7 +21,7 @@ export class BsaleService {
     return this.bsaleTokenModel.create({ accessToken });
   }
 
-  // Obtiene el token
+  // Obtiene el token para usarlo en las peticiones a Bsale
   async getToken(): Promise<string | null> {
     const tokenDoc = await this.bsaleTokenModel.findOne();
     return tokenDoc?.accessToken ?? null;
