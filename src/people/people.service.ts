@@ -1,26 +1,86 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePersonDto } from './dto/create-person.dto';
-import { UpdatePersonDto } from './dto/update-person.dto';
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Client, ClientDocument } from '../client/entities/client.entity';
+import { Person, PersonDocument } from './entities/person.entity';
+import { PipedriveService } from '../shared/pipedrive/pipedrive.service';
+import axios from 'axios';
 
 @Injectable()
 export class PeopleService {
-  create(createPersonDto: CreatePersonDto) {
-    return 'This action adds a new person';
-  }
+  private readonly logger = new Logger(PeopleService.name);
 
-  findAll() {
-    return `This action returns all people`;
-  }
+  constructor(
+    @InjectModel(Client.name) private clientModel: Model<ClientDocument>,
+    @InjectModel(Person.name) private personModel: Model<PersonDocument>, // <-- Agregado
+    private readonly pipedriveService: PipedriveService,
+  ) {}
 
-  findOne(id: number) {
-    return `This action returns a #${id} person`;
-  }
+  // Sincroniza personas con Pipedrive
+  async syncPeopleWithPipedrive(): Promise<{ created: number; updated: number }> {
+    const apiKey = await this.pipedriveService.getApiKey();
+    if (!apiKey) throw new Error('No Pipedrive API key found');
 
-  update(id: number, updatePersonDto: UpdatePersonDto) {
-    return `This action updates a #${id} person`;
-  }
+    const clients = await this.clientModel.find().lean();
+    let created = 0, updated = 0;
 
-  remove(id: number) {
-    return `This action removes a #${id} person`;
+    for (const client of clients) {
+      if (!client.email || !client.firstName || !client.lastName) {
+        this.logger.warn(`Cliente con datos incompletos: ${JSON.stringify(client)}`);
+        continue;
+      }
+
+      const personPayload = {
+        name: `${client.firstName} ${client.lastName}`.trim(),
+        email: [{ value: client.email, primary: true, label: 'main' }],
+        phone: client.phone ? [{ value: client.phone, primary: true, label: 'mobile' }] : [],
+      };
+
+      // Busca si ya existe en la colección people
+      const existingPerson = await this.personModel.findOne({ clientId: client.id });
+
+      try {
+        if (existingPerson && existingPerson.pipedriveId) {
+          // Actualiza en Pipedrive
+          const updateUrl = `https://api.pipedrive.com/v1/persons/${existingPerson.pipedriveId}?api_token=${apiKey}`;
+          await axios.put(updateUrl, personPayload);
+          updated++;
+
+          // Actualiza en Mongo
+          await this.personModel.updateOne(
+            { clientId: client.id },
+            {
+              $set: {
+                name: personPayload.name,
+                email: client.email,
+                phone: client.phone,
+              },
+            }
+          );
+        } else {
+          // Crea en Pipedrive
+          const createUrl = `https://api.pipedrive.com/v1/persons?api_token=${apiKey}`;
+          const response = await axios.post(createUrl, personPayload);
+          created++;
+
+          // Guarda en Mongo
+          await this.personModel.findOneAndUpdate(
+            { clientId: client.id },
+            {
+              clientId: client.id,
+              pipedriveId: response.data.data?.id,
+              name: personPayload.name,
+              email: client.email,
+              phone: client.phone,
+            },
+            { upsert: true, new: true }
+          );
+        }
+      } catch (error) {
+        this.logger.error(`Error al sincronizar persona ${client.email}:`, error.response?.data || error.message);
+      }
+    }
+
+    return { created, updated };
   }
 }
