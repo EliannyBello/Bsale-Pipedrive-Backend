@@ -6,7 +6,7 @@ export class BsaleToken {
   //codigo multivende
   @Prop({ required: true })
   accessToken: string;
-
+  urlBsale: string;
 }
 
 export type BsaleTokenDocument = HydratedDocument<BsaleToken>;

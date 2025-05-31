@@ -15,14 +15,13 @@ export class ClientService {
   // Función para obtener clientes de Bsale y guardarlos en la base de datos
   async syncBsaleClients(): Promise<any> {
 
-    // Obtiene el token de acceso de Bsale
-    const accessToken = await this.bsaleService.getToken();
-    if (!accessToken) throw new Error('No Bsale access token found');
+    const bsaleConfig = await this.bsaleService.getBsaleConfig()
+    if (!bsaleConfig) throw new Error('No Bsale access token found');
 
-    const url = 'https://api.bsale.io/v1/clients.json';
+    const url = bsaleConfig.urlBsale;
     const response = await axios.get(url, {
       headers: {
-        access_token: accessToken,
+        access_token: bsaleConfig.accessToken,
         Accept: 'application/json',
       },
     });
@@ -48,7 +47,17 @@ export class ClientService {
       );
     }
     return { count: recentClients.length };
+
+    //para que pueda ejecutarse y no filtre por las ultimas 24h 
+  //     for (const client of clients) {
+  //   await this.clientModel.updateOne(
+  //     { id: client.id },
+  //     { $set: client },
+  //     { upsert: true },
+  //   );
+  // }
+  // return { count: clients.length };
+
+
   }
-
-
 }
