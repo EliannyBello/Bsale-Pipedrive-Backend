@@ -6,6 +6,9 @@ export class BsaleToken {
   //codigo multivende
   @Prop({ required: true })
   accessToken: string;
+
+  //url de la api de bsale
+  @Prop({ required: true })
   urlBsale: string;
 }
 
