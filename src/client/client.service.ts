@@ -26,15 +26,26 @@ export class ClientService {
     });
 
     const clients = response.data.items;
-    // Guarda o actualiza cada cliente
-    for (const client of clients) {
+
+    // Filtrar por clientes creados en las últimas 24 horas
+    const now = new Date();
+    const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+    const recentClients = clients.filter(client => {
+      if (!client.createdAt) return false;
+      const createdAt = new Date(client.createdAt);
+      return createdAt >= last24h;
+    });
+
+    // Guarda o actualiza cada cliente reciente
+    for (const client of recentClients) {
       await this.clientModel.updateOne(
         { id: client.id },
         { $set: client },
         { upsert: true },
       );
     }
-    return { count: clients.length };
+    return { count: recentClients.length };
   }
 
 

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { EnumState } from 'src/common/enums/enums';
 
 @Schema()
 export class Client {
@@ -83,6 +84,14 @@ export class Client {
 
   @Prop()
   updatedAt: string;
+
+  @Prop({
+    type: String,
+    enum: EnumState,
+    default: EnumState.PENDING
+  })
+  status: EnumState;
+
 }
 
 export type ClientDocument = HydratedDocument<Client>;

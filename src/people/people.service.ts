@@ -5,6 +5,7 @@ import { Client, ClientDocument } from '../client/entities/client.entity';
 import { Person, PersonDocument } from './entities/person.entity';
 import { PipedriveService } from '../shared/pipedrive/pipedrive.service';
 import axios from 'axios';
+import { EnumState } from 'src/common/enums/enums';
 
 @Injectable()
 export class PeopleService {
@@ -76,6 +77,13 @@ export class PeopleService {
             { upsert: true, new: true }
           );
         }
+
+        // Cambia el status del cliente a COMPLETED después de sincronizar con Pipedrive
+        await this.clientModel.updateOne(
+          { id: client.id },
+          { $set: { status: EnumState.COMPLETED } }
+        );
+
       } catch (error) {
         this.logger.error(`Error al sincronizar persona ${client.email}:`, error.response?.data || error.message);
       }
