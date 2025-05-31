@@ -8,7 +8,7 @@ export class PeopleSchedule {
 
   constructor(private readonly peopleService: PeopleService) {}
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async handleCron() {
     this.logger.log('Sincronizando personas con Pipedrive...');
     try {
