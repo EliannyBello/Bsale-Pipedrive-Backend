@@ -22,6 +22,7 @@ export class BsaleService {
   }
 
 
+
   // Devuelve el token y la url de Bsale
   async getBsaleConfig(): Promise<{ accessToken: string; urlBsale: string } | null> {
     const tokenDoc = await this.bsaleTokenModel.findOne();
