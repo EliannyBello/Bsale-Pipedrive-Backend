@@ -27,8 +27,8 @@ export class UsersController {
     description: 'Operación exitosa',
   })
   @Get()
-  getUsers(): Promise<User[]> {
-    return this.usersService.findAll();
+  getUsers(): Promise<{ items: User[] }> {
+    return this.usersService.findAll().then(users => ({ items: users }));
   }
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Obtener usuario por id' })

@@ -41,13 +41,17 @@ export class UsersService {
     return user;
   }
   async update(
-    id: string,
+    _id: string,
     userDto: Partial<UpdateUserDto>,
   ): Promise<User | null> {
+    // Elimina _id si viene en el body
+    if ('_id' in userDto) {
+      delete userDto._id;
+    }
     if (userDto.password)
       userDto.password = await this.hashPassword(userDto.password);
     return this.userModel
-      .findByIdAndUpdate(new Types.ObjectId(id), userDto, { new: true })
+      .findByIdAndUpdate(new Types.ObjectId(_id), userDto, { new: true })
       .exec();
   }
 
